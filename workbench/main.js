@@ -18,8 +18,18 @@ function userController($scope, $filter) {
 		var newData = $filter('filter')($scope.myData, $scope.searchText);
 		return newData;
 	};
+	
+	$scope.$watch('searchText', function(){
+		var phase = $scope.$$phase;
+		if(phase == '$apply' || phase == '$digest') {
+			$scope.getData();
+		} else {
+			this.$apply($scope.getData());
+		}
+	});
 	 
     $scope.gridOptions = {
+		data: 'getData',
         selectedItems: $scope.mySelections,
         displaySelectionCheckbox: false,
         multiSelect: true,
@@ -40,6 +50,7 @@ function userController($scope, $filter) {
                       { 'Sku': 'M-1626429', 'Vendor': 'REEB', 'SeasonCode': '1846', 'Mfg_Id': '242-5856618', 'UPC': '029388467459' },
                       { 'Sku': 'Y-1914652', 'Vendor': 'LEVI', 'SeasonCode': '5553', 'Mfg_Id': '80-9194110', 'UPC': '433360049369' }];
     $scope.gridOptions2 = {
+		data: 'myData2',
         selectedItems: $scope.mySelections2,
         multiSelect: false,
         columnDefs: [{ field: 'Sku', displayName: 'My Sku', width: 'auto'}, 

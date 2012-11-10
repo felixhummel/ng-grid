@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 11/10/2012 12:55:38
+* Compiled At: 11/10/2012 13:35:58
 ***********************************************/
 
 (function(window, undefined){
@@ -920,7 +920,7 @@ ng.RowFactory = function (grid) {
 * FILE: ..\src\classes\grid.js
 ***********************************************/
 
-ng.Grid = function ($scope, options, data, gridDim, SortService) {
+ng.Grid = function ($scope, options, gridDim, SortService) {
     var defaults = {
             rowHeight: 30,
             columnWidth: 100,
@@ -966,7 +966,7 @@ ng.Grid = function ($scope, options, data, gridDim, SortService) {
     self.$viewport = null;
     self.$canvas = null;
     self.sortInfo = self.config.sortInfo;
-    self.sortedData = $.extend([], data); // we cannot watch for updates if you don't pass the string name
+    self.sortedData = (typeof($scope.$parent[self.config.data]) == 'function' ? $scope.$parent[self.config.data]() : $scope.$parent[self.config.data]) || self.config.data; ; // we cannot watch for updates if you don't pass the string name
     //initialized in the init method
     self.rowFactory = new ng.RowFactory(self);
     self.selectionService = new ng.SelectionService(self);
@@ -1722,29 +1722,29 @@ ngGridDirectives.directive('ngGrid', function ($compile, GridService, SortServic
                     var $element = $(iElement);
                     var options = $scope[iAttrs.ngGrid];
                     var gridDim = new ng.Dimension({ outerHeight: $($element).height(), outerWidth: $($element).width() });
-                    var grid = new ng.Grid($scope, options, $scope.$eval(iAttrs.ngGridData), gridDim, SortService);
+                    var grid = new ng.Grid($scope, options, gridDim, SortService);
                     var htmlText = ng.defaultGridTemplate(grid.config);
                     GridService.StoreGrid($element, grid);
                     grid.footerController = new ng.Footer($scope, grid);
                     ng.domUtility.measureGrid($element, grid, true);
 					
-					if (iAttrs.ngGridData) {
+					/*if (iAttrs.ngGridData) {
 						$scope.$watch(iAttrs.ngGridData, function (data) {
                             if (!data) return;
 							grid.sortedData = $.extend([], data);
 							grid.rowFactory.sortedDataChanged();
 							grid.refreshDomSizes();					
                         });
-					}
+					}*/
                     // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
-                    /*if (typeof options.data == "string") {
+                    if (typeof options.data == "string") {
                         $scope.$parent.$watch(options.data, function (a) {
                             if (!a) return;
                             grid.sortedData = typeof(a) == 'function'? a():a;
                             grid.rowFactory.sortedDataChanged();
                             grid.refreshDomSizes();
                         }, options.watchDataItems);
-                    }*/
+                    }
                     //set the right styling on the container
                     $element.addClass("ngGrid")
                         .addClass("ui-widget")

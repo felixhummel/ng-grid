@@ -7,29 +7,29 @@
                     var $element = $(iElement);
                     var options = $scope[iAttrs.ngGrid];
                     var gridDim = new ng.Dimension({ outerHeight: $($element).height(), outerWidth: $($element).width() });
-                    var grid = new ng.Grid($scope, options, $scope.$eval(iAttrs.ngGridData), gridDim, SortService);
+                    var grid = new ng.Grid($scope, options, gridDim, SortService);
                     var htmlText = ng.defaultGridTemplate(grid.config);
                     GridService.StoreGrid($element, grid);
                     grid.footerController = new ng.Footer($scope, grid);
                     ng.domUtility.measureGrid($element, grid, true);
 					
-					if (iAttrs.ngGridData) {
+					/*if (iAttrs.ngGridData) {
 						$scope.$watch(iAttrs.ngGridData, function (data) {
                             if (!data) return;
 							grid.sortedData = $.extend([], data);
 							grid.rowFactory.sortedDataChanged();
 							grid.refreshDomSizes();					
                         });
-					}
+					}*/
                     // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
-                    /*if (typeof options.data == "string") {
+                    if (typeof options.data == "string") {
                         $scope.$parent.$watch(options.data, function (a) {
                             if (!a) return;
                             grid.sortedData = typeof(a) == 'function'? a():a;
                             grid.rowFactory.sortedDataChanged();
                             grid.refreshDomSizes();
                         }, options.watchDataItems);
-                    }*/
+                    }
                     //set the right styling on the container
                     $element.addClass("ngGrid")
                         .addClass("ui-widget")
