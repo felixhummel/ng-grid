@@ -36,7 +36,7 @@
     self.CalcRenderedRange = function () {
         var rg = self.renderedRange,
 		    minRows = grid.minRowsToRender(),
-		    maxRows = Math.max(grid.sortedData.length, grid.minRowsToRender()),
+		    maxRows = Math.max(grid.sortedData().length, grid.minRowsToRender()),
 		    prevMaxRows = self.prevMaxRows,
 		    prevMinRows = self.prevMinRows,
 		    isDif, // flag to help us see if the viewableRange or data has changed "enough" to warrant re-building our rows
@@ -73,7 +73,7 @@
 
     self.renderedChange = function () {
         var rowArr = [];
-        var dataArr = grid.sortedData.slice(self.renderedRange.bottomRow, self.renderedRange.topRow);
+        var dataArr = grid.sortedData().slice(self.renderedRange.bottomRow, self.renderedRange.topRow);
 
         angular.forEach(dataArr, function (item, i) {
             var row = self.buildRowFromEntity(item, self.renderedRange.bottomRow + i);

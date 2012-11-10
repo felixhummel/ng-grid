@@ -23,12 +23,12 @@
 					}*/
                     // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
                     if (typeof options.data == "string") {
-                        $scope.$parent.$watch(options.data, function (a) {
-                            if (!a) return;
-                            grid.sortedData = typeof(a) == 'function'? a():a;
+                        $scope.$parent.$watch(options.data, function (data) {
+                            if (!data) return;
+                            grid.sortedData = typeof data == "function" ? data : function() { return data; };
                             grid.rowFactory.sortedDataChanged();
                             grid.refreshDomSizes();
-                        }, options.watchDataItems);
+                        });
                     }
                     //set the right styling on the container
                     $element.addClass("ngGrid")

@@ -2,7 +2,7 @@
 * ng-grid JavaScript Library
 * Authors: https://github.com/Crash8308/ng-grid/blob/master/README.md
 * License: MIT (http://www.opensource.org/licenses/mit-license.php)
-* Compiled At: 11/10/2012 13:35:58
+* Compiled At: 11/10/2012 14:01:34
 ***********************************************/
 
 (function(window, undefined){
@@ -840,7 +840,7 @@ ng.RowFactory = function (grid) {
     self.CalcRenderedRange = function () {
         var rg = self.renderedRange,
 		    minRows = grid.minRowsToRender(),
-		    maxRows = Math.max(grid.sortedData.length, grid.minRowsToRender()),
+		    maxRows = Math.max(grid.sortedData().length, grid.minRowsToRender()),
 		    prevMaxRows = self.prevMaxRows,
 		    prevMinRows = self.prevMinRows,
 		    isDif, // flag to help us see if the viewableRange or data has changed "enough" to warrant re-building our rows
@@ -877,7 +877,7 @@ ng.RowFactory = function (grid) {
 
     self.renderedChange = function () {
         var rowArr = [];
-        var dataArr = grid.sortedData.slice(self.renderedRange.bottomRow, self.renderedRange.topRow);
+        var dataArr = grid.sortedData().slice(self.renderedRange.bottomRow, self.renderedRange.topRow);
 
         angular.forEach(dataArr, function (item, i) {
             var row = self.buildRowFromEntity(item, self.renderedRange.bottomRow + i);
@@ -966,7 +966,7 @@ ng.Grid = function ($scope, options, gridDim, SortService) {
     self.$viewport = null;
     self.$canvas = null;
     self.sortInfo = self.config.sortInfo;
-    self.sortedData = (typeof($scope.$parent[self.config.data]) == 'function' ? $scope.$parent[self.config.data]() : $scope.$parent[self.config.data]) || self.config.data; ; // we cannot watch for updates if you don't pass the string name
+    self.sortedData = typeof self.config.data == "function" ? self.config.data : function() { return self.config.data; }; // we cannot watch for updates if you don't pass the string name
     //initialized in the init method
     self.rowFactory = new ng.RowFactory(self);
     self.selectionService = new ng.SelectionService(self);
@@ -1738,12 +1738,12 @@ ngGridDirectives.directive('ngGrid', function ($compile, GridService, SortServic
 					}*/
                     // if it is a string we can watch for data changes. otherwise you won't be able to update the grid data
                     if (typeof options.data == "string") {
-                        $scope.$parent.$watch(options.data, function (a) {
-                            if (!a) return;
-                            grid.sortedData = typeof(a) == 'function'? a():a;
+                        $scope.$parent.$watch(options.data, function (data) {
+                            if (!data) return;
+                            grid.sortedData = typeof data == "function" ? data : function() { return data; };
                             grid.rowFactory.sortedDataChanged();
                             grid.refreshDomSizes();
-                        }, options.watchDataItems);
+                        });
                     }
                     //set the right styling on the container
                     $element.addClass("ngGrid")

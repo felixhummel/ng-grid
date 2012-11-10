@@ -53,7 +53,7 @@ ng.Grid = function ($scope, options, gridDim, SortService) {
     self.$viewport = null;
     self.$canvas = null;
     self.sortInfo = self.config.sortInfo;
-    self.sortedData = (typeof($scope.$parent[self.config.data]) == 'function' ? $scope.$parent[self.config.data]() : $scope.$parent[self.config.data]) || self.config.data; ; // we cannot watch for updates if you don't pass the string name
+    self.sortedData = typeof self.config.data == "function" ? self.config.data : function() { return self.config.data; }; // we cannot watch for updates if you don't pass the string name
     //initialized in the init method
     self.rowFactory = new ng.RowFactory(self);
     self.selectionService = new ng.SelectionService(self);
