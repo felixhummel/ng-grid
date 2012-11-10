@@ -32,7 +32,11 @@
 </head>
     <body ng-app="myApp" ng-controller="userController">
 		<input ng-model="searchText" />
-        <div style="margin: 10px;  width: 600px; height: 400px;" ng-grid="gridOptions" ng-grid-data="getData()">
+		<ul>
+			<li ng-repeat="item in getData()">{{item}}
+			</li>
+		</ul>
+        <div style="margin: 10px;  width: 600px; height: 400px;" ng-grid="gridOptions" ng-grid-data="myData">
         </div>
         <button ng-click="changeData()">Insert Rows</button>
         <span>mySelections: {{mySelections | json}}</span>
