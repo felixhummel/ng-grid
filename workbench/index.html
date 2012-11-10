@@ -2,8 +2,8 @@
 <head>
     <meta charset="utf-8" />
     <title>ng-grid workbench</title>
-    <link rel="stylesheet" type="text/css" href="../ng-grid.css" />
     <link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../ng-grid.css" />
     
 	<style type="text/css">
 		.red {
@@ -31,12 +31,12 @@
     </script>
 </head>
     <body ng-app="myApp" ng-controller="userController">
-
-        <div style="margin: 10px;  width: 600px; height: 400px;" ng-grid="gridOptions">
+		<input ng-model="searchText" />
+        <div style="margin: 10px;  width: 600px; height: 400px;" ng-grid="gridOptions" ng-grid-data="getData()">
         </div>
         <button ng-click="changeData()">Insert Rows</button>
         <span>mySelections: {{mySelections | json}}</span>
-        <div style="margin: 10px;  width: 600px; height: 400px;" ng-grid="gridOptions2">
+        <div style="margin: 10px;  width: 600px; height: 400px;" ng-grid="gridOptions2" ng-grid-data="myData2">
         </div>
         <span>mySelections2: {{mySelections2 | json}}</span>
     </body>

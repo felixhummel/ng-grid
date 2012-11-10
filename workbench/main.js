@@ -1,7 +1,7 @@
 /// <reference path="../plugins/ng-grid-reorderable.js" />
 /// <reference path="../ng-grid-1.0.0.debug.js" />
 
-function userController($scope) {
+function userController($scope, $filter) {
     var self = this;
     $scope.mySelections = [];
     $scope.mySelections2 = [];
@@ -13,22 +13,17 @@ function userController($scope) {
                      {name: "Ether", allowance: 42, birthday: 1288323623006 , paid: false},
                      {name: "Alma", allowance: 43, birthday: 1288323623006 , paid: true},
                      {name: "Jared", allowance: 21, birthday: 1288323623006 , paid: true}];
+					 
+	$scope.getData = function(){
+		var newData = $filter('filter')($scope.myData, $scope.searchText);
+		return newData;
+	};
+	 
     $scope.gridOptions = {
-        data: 'myData',
         selectedItems: $scope.mySelections,
         displaySelectionCheckbox: false,
         multiSelect: true,
-        plugins: [new ngGridReorderable(),
-                  new ngGridGroupable({
-                      group: {
-                          field: 'name',
-                          label: 'Fancy Name',
-                          group: {
-                              field: 'allowance',
-                              label: 'Fancy Age'
-                          }
-                      }
-                  })],
+        plugins: [new ngGridReorderable()],
         columnDefs: [{ field: 'name', displayName: 'Very Long Name Title', width: 200, cellTemplate: '<input class="ui-widget input" style="width:100%;height:100%;" ng-model="row.entity[col.field]" />'},
                      { field: 'allowance', width: 100, cellTemplate: '<div ng-class="{red: row.entity[col.field] > 30}"><div class="ngCellText">{{row.entity[col.field] | currency}}</div></div>'},
                      { field: 'birthday', width: 100, cellTemplate: '<div class="ngCellText">{{row.entity[col.field] | date}}</div>' },
@@ -45,7 +40,6 @@ function userController($scope) {
                       { 'Sku': 'M-1626429', 'Vendor': 'REEB', 'SeasonCode': '1846', 'Mfg_Id': '242-5856618', 'UPC': '029388467459' },
                       { 'Sku': 'Y-1914652', 'Vendor': 'LEVI', 'SeasonCode': '5553', 'Mfg_Id': '80-9194110', 'UPC': '433360049369' }];
     $scope.gridOptions2 = {
-        data: 'myData2',
         selectedItems: $scope.mySelections2,
         multiSelect: false,
         columnDefs: [{ field: 'Sku', displayName: 'My Sku', width: 'auto'}, 

@@ -7,7 +7,7 @@
 /// <reference path="../navigation.js"/>
 /// <reference path="../utils.js"/>
 
-ng.Grid = function ($scope, options, gridDim, SortService) {
+ng.Grid = function ($scope, options, data, gridDim, SortService) {
     var defaults = {
             rowHeight: 30,
             columnWidth: 100,
@@ -53,7 +53,7 @@ ng.Grid = function ($scope, options, gridDim, SortService) {
     self.$viewport = null;
     self.$canvas = null;
     self.sortInfo = self.config.sortInfo;
-    self.sortedData = $scope.$parent[self.config.data] || self.config.data; // we cannot watch for updates if you don't pass the string name
+    self.sortedData = $.extend([], data); // we cannot watch for updates if you don't pass the string name
     //initialized in the init method
     self.rowFactory = new ng.RowFactory(self);
     self.selectionService = new ng.SelectionService(self);
